@@ -1,0 +1,1 @@
+welcome to the smart contract documentation
