@@ -1,26 +1,39 @@
+
 @import "tailwindcss";
+@tailwind base;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn {
+        @apply px-4 py-2 rounded-lg font-medium inline-flex items-center justify-center  tracking-tight
+    }
+    .btn-primary {
+        @apply bg-black text-white 
+    }
+
+    .btn-text {
+        @apply bg-transparent text-black
+    }
+    .tag{
+        @apply text-sm border border-[#222]/10 inline-flex px-3 py-1 rounded-lg tracking-tight
+    }
+
+    .heading{
+        @apply text-3xl lg:text-7xl  font-bold tracking-tighter bg-gradient-to-b from-black to-[#001E80] text-transparent bg-clip-text mt-6
+    }
+
+    .sub-heading{
+        @apply text-xl text-[#010D3E] tracking-tight mt-6
+    }
+    .card{
+        @apply p-10 rounded-3xl border border-[#F1F1F1] shadow-[0_7px_14px_#EAEAEA] max-w-xs w-full
+    }
+
+    .logo-ticker-image{
+        @apply h-8 w-auto ;
+    }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
