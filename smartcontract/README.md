@@ -2,9 +2,11 @@ dforge create ./src/LandLedger.sol:LandLedger --rpc-url https://eth-sepolia.g.al
 Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. Visit https://book.getfoundry.sh/announcements for more information.
 To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment.
 
-[⠊] Compiling...
-No files changed, compilation skipped
+[⠒] Compiling...
+[⠆] Compiling 1 files with Solc 0.8.29
+[⠰] Solc 0.8.29 finished in 123.30ms
+Compiler run successful!
 Enter keystore password:
 Deployer: 0x4613452431311Aee9C669E500AF3Ebb0B18B7182
-Deployed to: 0x60E03119347Dfc3a4E862f4c9f2B6d95e82b6d08
-Transaction hash: 0x974e48c32daf23c2465a620a9ca7cb493c29e63fcc8005ff7232a1a3ef8098ff
+Deployed to: 0xa3d600d34FB0B05bD3180e8aAcb4b205320ae257
+Transaction hash: 0x4d5b12d900aed9e6ed0429937699d8a171ae448e515d1ae92d7f007b0d45fdf8

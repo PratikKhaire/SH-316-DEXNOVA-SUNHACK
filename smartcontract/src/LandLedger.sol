@@ -64,11 +64,12 @@ contract LandLedger {
 
     function transferOwnership(
         uint256 landId,
-        address newOwner
+        address newOwner,
+        string memory newOwnerName
     ) public onlyOwner(landId) {
         address oldOwner = lands[landId].ownerAddress;
         lands[landId].ownerAddress = newOwner;
-        lands[landId].ownerName = "New Owner"; // Update this as needed
+        lands[landId].ownerName = newOwnerName;
 
         // Remove land from old owner's list
         removeLandFromOwner(oldOwner, landId);
