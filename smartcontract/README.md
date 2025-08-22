@@ -1,66 +1,10 @@
-## Foundry
+dforge create ./src/LandLedger.sol:LandLedger --rpc-url https://eth-sepolia.g.alchemy.com/v2/QfsaKZK96zCh4G9gO22K9sDnGNM5g2o- --account my-sepolia-key --broadcast
+Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. Visit https://book.getfoundry.sh/announcements for more information.
+To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
-
-Foundry consists of:
-
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+[⠊] Compiling...
+No files changed, compilation skipped
+Enter keystore password:
+Deployer: 0x4613452431311Aee9C669E500AF3Ebb0B18B7182
+Deployed to: 0x60E03119347Dfc3a4E862f4c9f2B6d95e82b6d08
+Transaction hash: 0x974e48c32daf23c2465a620a9ca7cb493c29e63fcc8005ff7232a1a3ef8098ff
