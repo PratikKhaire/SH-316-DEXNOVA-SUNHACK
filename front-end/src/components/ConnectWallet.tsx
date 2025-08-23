@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from './ui/button';
-import { getProvider, getSigner } from '@/lib/ethers';
+import { getProvider, getSigner, switchToSepolia } from '@/lib/ethers';
 import { Wallet, LogOut } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
