@@ -100,7 +100,7 @@ export function ConnectWallet({ onConnect }: ConnectWalletProps) {
 
   return (
     <div>
-      <Button onClick={connectWallet} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+      <Button onClick={connectWallet} className="bg-black text-white px-4 py-2 rounded-lg font-medium inline-flex items-center justify-center tracking-tight">
         <Wallet className="h-4 w-4 mr-2" />
         Connect Wallet
       </Button>
