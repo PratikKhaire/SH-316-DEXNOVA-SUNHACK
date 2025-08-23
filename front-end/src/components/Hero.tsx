@@ -45,11 +45,11 @@ export const Hero = () => {
   return (
     <section
       ref={heroRef}
-      className="relative max-w-full px-6 py-16 md:py-24 lg:py-32 bg-gradient-to-br from-amber-50 via-blue-50 to-indigo-100 overflow-x-clip"
+      className="relative max-w-full px-6 py-8 md:py-16 lg:py-24 bg-gradient-to-br from-amber-50 via-blue-50 to-indigo-100 overflow-x-clip"
     >
       {/* Background pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-200/20 via-transparent to-blue-200/20" />
-      
+
       <div className="relative max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Content */}
@@ -69,7 +69,7 @@ export const Hero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+                className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight"
               >
                 Welcome to{' '}
                 <span className="bg-gradient-to-r from-amber-600 to-blue-600 bg-clip-text text-transparent">
@@ -135,19 +135,17 @@ export const Hero = () => {
               <motion.img
                 src={cogImage.src}
                 alt="Blockchain technology visualization"
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 lg:w-96 lg:h-96"
-                animate={{ 
-                  rotate: 360,
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-280 h-260 lg:w-240 lg:h-180 max-w-full max-h-full"
+                animate={{
+                  scale: [1, 1.05, 1],
                 }}
                 transition={{
-                  rotate: {
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
                 }}
               />
-              
+              {/* Cylinder Image */}
               <motion.img
                 src={cylinderImage.src}
                 alt="Data storage visualization"
@@ -156,7 +154,7 @@ export const Hero = () => {
                 className="absolute top-20 right-8 hidden lg:block"
                 style={{ translateY: translateY }}
               />
-              
+              {/* Noodle Image */}
               <motion.img
                 src={noodleImage.src}
                 alt="Network connection visualization"

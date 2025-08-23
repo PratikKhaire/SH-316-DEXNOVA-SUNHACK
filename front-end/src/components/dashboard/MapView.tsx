@@ -1,97 +1,96 @@
+
 "use client";
 
-import { useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import type { Land } from '@/lib/types';
-import { APIProvider, Map, AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { MapIcon } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import type { LatLngExpression } from 'leaflet';
+import "leaflet/dist/leaflet.css";
+import "leaflet-draw/dist/leaflet.draw.css";
+import { Skeleton } from '../ui/skeleton';
 
 interface MapViewProps {
-  lands: Land[];
+    lands: Land[];
 }
 
-// It is recommended to move the API key to environment variables
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+const MapComponentWithNoSSR = dynamic(() => import('@/components/dashboard/MapComponent'), {
+    ssr: false,
+    loading: () => <Skeleton className="h-full w-full" />
+});
 
-const getCoordinates = (location: string): { lat: number, lng: number } | null => {
-    const parts = location.split(',').map(s => s.trim());
-    if (parts.length === 2) {
-        const lat = parseFloat(parts[0]);
-        const lng = parseFloat(parts[1]);
-        if (!isNaN(lat) && !isNaN(lng)) {
-            return { lat, lng };
+type Coordinate = { lat: number; lng: number };
+
+const getCoordinates = (location: string): Coordinate[] | null => {
+    try {
+        const coords = JSON.parse(location);
+        if (Array.isArray(coords) && coords.length > 0 && 'lat' in coords[0] && 'lng' in coords[0]) {
+            return coords;
+        }
+    } catch (e) {
+        const parts = location.split(',').map(s => s.trim());
+        if (parts.length === 2) {
+            const lat = parseFloat(parts[0]);
+            const lng = parseFloat(parts[1]);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                return [{ lat, lng }];
+            }
         }
     }
     return null;
 }
 
+const getCenter = (coords: Coordinate[]): Coordinate => {
+    if (coords.length === 0) return { lat: 0, lng: 0 };
+    if (coords.length === 1) return coords[0];
+
+    let lat = 0, lng = 0;
+    coords.forEach(coord => {
+        lat += coord.lat;
+        lng += coord.lng;
+    });
+    return { lat: lat / coords.length, lng: lng / coords.length };
+};
+
 export function MapView({ lands }: MapViewProps) {
-  const [selectedLand, setSelectedLand] = useState<Land | null>(null);
+    const [isClient, setIsClient] = useState(false);
 
-  const landMarkers = lands.map(land => ({
-    ...land,
-    coordinates: getCoordinates(land.location)
-  })).filter(land => land.coordinates !== null);
-  
-  const defaultCenter = landMarkers.length > 0 && landMarkers[0].coordinates ? landMarkers[0].coordinates : { lat: 34.0522, lng: -118.2437 };
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
-  if (!API_KEY) {
-      return (
+    const landMarkers = useMemo(() => {
+        return lands.map(land => {
+            const coordinates = getCoordinates(land.location);
+            if (!coordinates) return null;
+
+            const center = getCenter(coordinates);
+            return {
+                ...land,
+                coordinates,
+                center,
+            };
+        }).filter((land): land is NonNullable<typeof land> => land !== null);
+    }, [lands]);
+
+    const defaultCenter: LatLngExpression = landMarkers.length > 0 && landMarkers[0].center ? [landMarkers[0].center.lat, landMarkers[0].center.lng] : [34.0522, -118.2437];
+
+    return (
         <Card className="mt-6">
-          <CardHeader>
-            <CardTitle className='flex items-center gap-2'><MapIcon />Map Unavailable</CardTitle>
-            <CardDescription>The Google Maps API key is not configured. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables to enable map functionality.</CardDescription>
-          </CardHeader>
+            <CardHeader>
+                <CardTitle>Land Asset Map</CardTitle>
+                <CardDescription>Visual representation of your land assets. Click a marker or polygon for details.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div style={{ height: '60vh', width: '100%' }} className='rounded-lg overflow-hidden'>
+                    {isClient ? <MapComponentWithNoSSR landMarkers={landMarkers} defaultCenter={defaultCenter} /> : <Skeleton className="h-full w-full" />}
+                </div>
+                {landMarkers.length < lands.length && (
+                    <p className="text-sm text-muted-foreground mt-4">
+                        Note: {lands.length - landMarkers.length} land(s) could not be displayed on the map due to missing or invalid coordinates.
+                    </p>
+                )}
+            </CardContent>
         </Card>
-      );
-  }
-
-  return (
-    <Card className="mt-6">
-        <CardHeader>
-            <CardTitle>Land Asset Map</CardTitle>
-            <CardDescription>Visual representation of your land assets with GPS coordinates. Click a marker for details.</CardDescription>
-        </CardHeader>
-        <CardContent>
-            <div style={{ height: '60vh', width: '100%' }} className='rounded-lg overflow-hidden'>
-                <APIProvider apiKey={API_KEY}>
-                    <Map
-                        defaultCenter={defaultCenter}
-                        defaultZoom={landMarkers.length > 1 ? 8 : 12}
-                        mapId="landview-map"
-                        gestureHandling={'greedy'}
-                        disableDefaultUI={true}
-                    >
-                        {landMarkers.map((land, index) => (
-                            land.coordinates &&
-                            <AdvancedMarker
-                                key={index}
-                                position={land.coordinates}
-                                onClick={() => setSelectedLand(land)}
-                            />
-                        ))}
-
-                        {selectedLand && selectedLand.coordinates && (
-                            <InfoWindow
-                                position={selectedLand.coordinates}
-                                onCloseClick={() => setSelectedLand(null)}
-                            >
-                                <div className="p-2">
-                                    <h3 className="font-bold text-base">Land #{selectedLand.id.toString()}</h3>
-                                    <p className="text-sm mt-1">Owner: {selectedLand.ownerName}</p>
-                                    <p className="text-xs text-muted-foreground mt-1 font-mono">{selectedLand.location}</p>
-                                </div>
-                            </InfoWindow>
-                        )}
-                    </Map>
-                </APIProvider>
-            </div>
-            {landMarkers.length < lands.length && (
-                <p className="text-sm text-muted-foreground mt-4">
-                    Note: {lands.length - landMarkers.length} land(s) could not be displayed on the map due to missing or invalid GPS coordinates in their location field.
-                </p>
-            )}
-        </CardContent>
-    </Card>
-  );
+    );
 }

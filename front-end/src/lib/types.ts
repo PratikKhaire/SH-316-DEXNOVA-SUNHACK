@@ -5,4 +5,5 @@ export type Land = {
   ownerAddress: string;
   documentHash: string;
   exists: boolean;
+  area: string; // This will be used to store the area, populated from documentHash
 };

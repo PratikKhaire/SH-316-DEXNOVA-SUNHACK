@@ -12,6 +12,7 @@ import { DashboardView } from '@/components/dashboard/DashboardView'
 import { RegisterView } from '@/components/dashboard/RegisterView'
 import { TransferView } from '@/components/dashboard/TransferView'
 import { MapView } from '@/components/dashboard/MapView'
+import { TabbedInterface } from '@/components/dashboard/TabbedInterface'
 import { useLandLedger } from '@/hooks/useLandLedger'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -22,7 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Landmark } from 'lucide-react'
+import { Landmark, LayoutDashboard, FilePlus, ArrowRightLeft, MapPin } from 'lucide-react'
 
 export default function Page() {
   const [account, setAccount] = useState<string | null>(null)
@@ -56,7 +57,6 @@ export default function Page() {
     location: string
     ownerName: string
     documentHash: string
-    area: string
   }) => {
     await registerLand(data)
     fetchLands()
@@ -73,9 +73,7 @@ export default function Page() {
 
   return (
     <div className="font-sora">
-      <Header>
-        <ConnectWallet onConnect={handleConnect} />
-      </Header>
+      <Header />
       <Hero />
       <ProductShowcase />
       <main className="flex-grow container mx-auto px-4 py-8">
@@ -98,32 +96,7 @@ export default function Page() {
           </div>
         ) : (
           <>
-            <nav className="mb-8">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger
-                  value="dashboard"
-                  onClick={() => setActiveTab('dashboard')}
-                >
-                  Dashboard
-                </TabsTrigger>
-                <TabsTrigger
-                  value="register"
-                  onClick={() => setActiveTab('register')}
-                >
-                  Register Land
-                </TabsTrigger>
-                <TabsTrigger
-                  value="transfer"
-                  onClick={() => setActiveTab('transfer')}
-                >
-                  Transfer Land
-                </TabsTrigger>
-                <TabsTrigger value="map" onClick={() => setActiveTab('map')}>
-                  Map View
-                </TabsTrigger>
-              </TabsList>
-            </nav>
-            <div>
+            <TabbedInterface activeTab={activeTab} setActiveTab={setActiveTab}>
               {activeTab === 'dashboard' && (
                 <DashboardView lands={lands} loading={loading} />
               )}
@@ -137,7 +110,7 @@ export default function Page() {
                 <TransferView lands={lands} onTransfer={handleTransfer} />
               )}
               {activeTab === 'map' && <MapView lands={landsWithCoords} />}
-            </div>
+            </TabbedInterface>
           </>
         )}
       </main>
